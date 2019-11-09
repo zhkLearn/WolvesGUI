@@ -1,0 +1,15 @@
+{
+	"SDataTableWolves": {
+		"width": 800,
+		"height": 618,
+		"version": "1.9.2",
+		"matchSubSceneInfoesMultiSource": {
+			"mapMatchSubSceneInfoMultiSource": [
+			]
+		},
+		"matchSubSceneInfoes": {
+			"mapMatchSubSceneInfo": [
+			]
+		}
+	}
+}

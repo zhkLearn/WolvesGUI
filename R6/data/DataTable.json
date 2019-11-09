@@ -1,0 +1,75 @@
+{
+	"SDataTableWolves": {
+		"width": 800,
+		"height": 618,
+		"version": "1.9.2",
+		"matchSubSceneInfoesMultiSource": {
+			"mapMatchSubSceneInfoMultiSource": [
+				{
+					"first": "train_wallwrecker",
+					"second": {
+						"SSubSceneInfoMultiSource": {
+							"left": 20,
+							"top": 310,
+							"right": 180,
+							"bottom": 460,
+							"degree": 0.85,
+							"sources": {
+								"vectorString": [
+									"matchSubScene/army/train/wallwrecker.png"
+								]
+							}
+						}
+					}
+				}
+			]
+		},
+		"matchSubSceneInfoes": {
+			"mapMatchSubSceneInfo": [
+				{
+					"first": "btn_to_play",
+					"second": {
+						"SSubSceneInfo": {
+							"filePath": "matchSubScene/btn_to_play.png",
+							"key": "btn_to_play",
+							"left": 110,
+							"top": 210,
+							"right": 180,
+							"bottom": 300,
+							"degree": 0.90,
+							"count": 1
+						}
+					}
+				}, {
+					"first": "btn_play_newcomer",
+					"second": {
+						"SSubSceneInfo": {
+							"filePath": "matchSubScene/btn_play_newcomer.png",
+							"key": "btn_play_newcomer",
+							"left": 90,
+							"top": 330,
+							"right": 200,
+							"bottom": 370,
+							"degree": 0.85,
+							"count": 1
+						}
+					}
+				}, {
+					"first": "cap_matchmaking",
+					"second": {
+						"SSubSceneInfo": {
+							"filePath": "matchSubScene/cap_matchmaking.png",
+							"key": "cap_matchmaking",
+							"left": 140,
+							"top": 240,
+							"right": 330,
+							"bottom": 300,
+							"degree": 0.90,
+							"count": 1
+						}
+					}
+				}
+			]
+		}
+	}
+}

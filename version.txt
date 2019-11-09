@@ -1,0 +1,66 @@
+﻿Version 0.8	2019-11-9
+		Robot增加下面函数：
+			InputKeyEvent(wnd, vk, isDown)
+			InputText(wnd, str, mode) -- //str must in UTF-8; mode, 0: keep original; 1: to MBCS; 2: to Unicode
+            // 剪贴板相关
+            bool CopyTextToClipboard(str)
+            str = GetTextFromClipboard()
+            InputCut(wnd);
+            InputCopy(wnd);
+            InputPaste(wnd);
+
+Version 0.7	2019-10-30
+		增加函数Wolves.Version()，获取版本号string
+
+Version 0.6	2019-10-30
+		InputForegroundProbeKeyBoardIndex(int)
+		刺探驱动模式下键盘索引，可以尝试设置1-9，然后发送按键，检查按键结果。
+		如果监测到正确输入内容，说明刺探到索引；重置设置为0。
+		如果刺探之前已有物理键盘按键，刺探不起作用。
+
+Version 0.5	2019-10-17
+		修正连续前台按键延迟问题。
+
+Version 0.3	2019-9-5
+		增加HWND封装类Window，以及WindowWrapArray_t
+			IsValid()
+			CloseWindow()
+			FromHandle(int)
+			GetHandle()
+			SRect GetWindowRect
+			SetWindowRect(SRect)
+			SRect GetClientRect()
+			IsVisible()
+			IsMinimized()
+			IsMaximized()
+			ShowWindow(show)	-- same as Win32 ShowWindow
+			GetWindowText()
+			SetWindowText(string)
+			GetWindowClass()
+			GetWindowLong(index)
+			SetWindowLong(index, value)
+			FlashWindow()
+			FindChildWindow(title, class)
+			WindowWrapArray_t s_FindWindow(title, class)	--静态函数
+		TakeSnapshotDesktop() removed, added TakeSnapshotWindow(wnd)
+		Robot里面WindowXXX等函数被移除。
+		按键和鼠标输入第一个参数需要指定Window
+
+		local wndDesktop = Window()
+		wndDesktop:FromHandle(0)
+		local gs = robot:TakeSnapshotWindow(wndDesktop);
+
+		-- 支持通配符*, ?
+		local wndArray = Window.s_FindWindow("SHA-WKS-AC117-*", "")
+		local count = wndArray:Size()
+		g_mainGameWnd = wndArray:At(1)
+		-- Params: window, simple(false: hook 3d), flipY
+		robot:HookWindow(g_mainGameWnd, true, false)
+
+		
+Version 0.2	2019-8-28
+		增加函数robot:InitializeEx()，可以指定监视窗口位置和大小，以及是否集成到Love引擎窗口里面。
+		Params: useInputDriver, PositionMonitor, SizeMonitor, ChildWnd
+
+Version 0.1	2019-8-21
+		WolvesGUI first release.
