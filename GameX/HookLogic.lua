@@ -8,8 +8,9 @@ require "GameX.StateScripts"
 ---------------------------------------------------------------------
 -- some global configs
 
-g_InputUseDriver = true
+g_InputUseDriver = false
 g_mainGameWnd = nil
+g_gameContentWnd = nil
 
 ---------------------------------------------------------------------
 g_UpdateTime =
@@ -202,19 +203,27 @@ function main()
 
 	
 	-- 支持通配符*, ?
-	local wndArray = Window.s_FindWindow("SHA-WKS-AC117-*", "")
+	local wndArray = Window.s_FindWindow("leidian*", "")
 	local count = wndArray:Size()
-	LogInfo("Find all windows with titile is 'SHA-WKS-AC117-*': " .. tostring(count))
+	LogInfo("Find all windows with titile is 'leidian*': " .. tostring(count))
 	
 	if count ~= 0 then
 		g_mainGameWnd = wndArray:At(1)
 	
 		-- Params: window, simple(false: hook 3d), flipY
-		if not robot:HookWindow(g_mainGameWnd, true, false) then
+		if not robot:HookWindow(g_mainGameWnd, false, true) then
 			LogError("robot:HookWindow failed!")
-		return
-	end
+			return
+		end
 		LogInfo("robot:HookWindow() OK")
+		
+		wndArray = g_mainGameWnd:FindChildWindow("TheRender", "")
+		if wndArray:Size() > 0 then
+			g_gameContentWnd = wndArray:At(1)
+			LogInfo("subWnd found. ClientRect: " .. tostring(g_gameContentWnd:GetClientRect()))
+		else
+			LogError("subWnd NOT found!")
+		end
 	end
 
 
@@ -244,79 +253,3 @@ end
 
 main()
 
---[[
-函数说明： 时间单位都是毫秒。
-
-Wolves
-{
-	bool Initialize(gameKey)	--例如: R6
-	Finalize()
-	Update(dt)
-	GetRobot()	-- Robot是单例，多线程之间共享
-
-	Sleep(int msTime)						-- [线程安全]
-	int GetCurTime()						-- [线程安全]
-	LogDebug(string)						-- [线程安全]
-	LogInfo(string)							-- [线程安全]
-	LogWarn(string)							-- [线程安全]
-	LogError(string)						-- [线程安全]
-	LogFatal(string)						-- [线程安全]
-
-	-- SharedManager 函数都是线程安全的
-	SharedManager
-	{
-		sharedTable NewSharedTable()
-		bool ShareSharedTable(sharedTable, name)
-		sharedTable AcquireSharedTable(name)
-		DumpSharedTable(sharedTable, codeFormat)
-
-		bool CreateThread(name)
-		bool IsThreadValid(name)
-		bool PauseThread(name)
-		bool ResumeThread(name)
-		bool AbortThread(name)
-		bool SendMessageToThread(name, sharedTable)
-		sharedTable FetchCurThreadMessage()
-		bool SendMessageToMainThread(sharedTable)
-	}
-}
-
--- Robot函数(注意： 只有标记为[线程安全]的函数才能在所有线程里面使用)
-{
-	-- 这些函数需要在同一个线程里面使用
-	--[
-		bool Initialize(g_EnableMonitoringWindow, g_InputUseDriver)
-		Finalize()
-		bool HookWindow(caption, simple, bFlipY)		-- 如果simple==false, Hook 3D rendering
-		StopHookWindow()
-		GameScene* TakeSnapshot()
-		GameScene* GetCurGameScene()
-
-		SRectVector IsSubSceneMatched(subSceneName)
-		SRectVector IsAnySubSceneMatched(StringVector subSceneNames)
-		SRectVector IsSubSceneMatchedInRect(subSceneName, rect)
-		bool IsPixelMatched(SSize posStart, int offSetX, int offSetY, int pixelCount, SRGB rgb, SRGB rgbT)
-		bool IsGrayRect(SRect)
-	--]
-
-
-	bool WindowIsValid()					-- [线程安全]
-	WindowShowHide(b)						-- [线程安全] true for show
-	WindowSetPosition(x, y)					-- [线程安全]
-	WindowMinimize(b)						-- [线程安全] true for Minimize, false for Restore
-	SSize WindowGetDeskTopSize()			-- [线程安全]
-
-	-- 后台按键操作，x, y是窗口客户区坐标。Dx游戏要前台方式。
-	InputClick(x, y, bChildWnd)				-- [线程安全]
-	InputHoldDown(x, y, bChildWnd)			-- [线程安全]
-	InputHoldMove(x, y, bChildWnd)			-- [线程安全]
-	InputHoldRelease(x, y, bChildWnd)		-- [线程安全]
-
-	-- 前台按键操作，x, y是窗口客户区坐标
-	InputForegroundMouseButtonEvent(bool useDriver, bool isLeft, bool isDown)	-- [线程安全]
-	InputForegroundMouseMove(bool useDriver, int x, int y)						-- [线程安全]
-	InputForegroundMouseScroll(bool useDriver, bool isUp)						-- [线程安全]
-	InputForegroundKeyEvent(bool useDriver, int vk, bool isExtend, bool isDown) -- [线程安全] vk is in virtual-key code
-}
-
---]]

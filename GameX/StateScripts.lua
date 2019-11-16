@@ -40,8 +40,8 @@ function StateUnknown:OnUpdate(robot, dtTime)
 		LogInfo("Found COC icon in desktop.");
 		
 		local pt = rcOuts:At(1):Center();
-		LogInfo(pt)
-		robot:InputClick(pt.cx, (pt.cy), true);
+		--LogInfo(tostring(pt))
+		robot:InputClick(g_gameContentWnd, pt.cx, pt.cy);
 		
 	else
 

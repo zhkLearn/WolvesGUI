@@ -6,7 +6,7 @@ require "Hook"
 
 local clearColor = { 0, 0, 0 }
 local robot = nil
---local testImg = nil
+local testImg = nil
 local bShowDemoWindow = false
 
 ----[[
@@ -85,7 +85,7 @@ function love.load(arg)
 
 		-- Initialize() Params: enableMonitorWindow, useInputDriver
 		-- InitializeEx() Params: useInputDriver, PositionMonitor, SizeMonitor, ChildWnd
-		if not robot:InitializeEx(true, SSize(600, 30), SSize(400, 250), true) then
+		if not robot:InitializeEx(false, SSize(700, 30), SSize(400, 250), true) then
 			Wolves.LogError("robot:Initialize() failed!")
 			return
 		end
@@ -99,7 +99,7 @@ function love.load(arg)
 		end
 	end
 
-	--testImg = love.graphics.newImage("test.png")
+	testImg = love.graphics.newImage("test.png")
 	
 end
 
@@ -135,7 +135,7 @@ function love.draw()
 
     love.graphics.clear(clearColor[1], clearColor[2], clearColor[3])
 	
-	--love.graphics.draw(testImg, 0, 0)
+	love.graphics.draw(testImg, 0, 0)
 	
 	theAppLog:Draw("Log", true);
 	

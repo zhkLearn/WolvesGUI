@@ -2,13 +2,88 @@
 	"SDataTableWolves": {
 		"width": 800,
 		"height": 618,
-		"version": "1.9.2",
+		"version": "1.0.0",
 		"matchSubSceneInfoesMultiSource": {
 			"mapMatchSubSceneInfoMultiSource": [
+				{
+					"first": "coc_logo_desktop_ld",
+					"second": {
+						"SSubSceneInfoMultiSource": {
+							"left": 10,
+							"top": 10,
+							"right": 760,
+							"bottom": 600,
+							"degree": 0.72,
+							"count": 10,
+							"sources": {
+								"vectorString": [
+									"matchSubScene/ld/desktop.png", "matchSubScene/ld/desktop_2.png", "matchSubScene/ld/desktop_qq.png", "matchSubScene/ld/desktop_2_qq.png"
+								]
+							}
+						}
+					}
+				}
 			]
 		},
 		"matchSubSceneInfoes": {
 			"mapMatchSubSceneInfo": [
+				{
+					"first": "WorkerIcon_NewTown",
+					"second": {
+						"SSubSceneInfo": {
+							"filePath": "matchSubScene/WorkerIcon_NewTown.png",
+							"key": "WorkerIcon_NewTown",
+							"left": 330,
+							"top": 10,
+							"right": 380,
+							"bottom": 70,
+							"degree": 0.75
+						}
+					}
+				}, {
+					"first": "under_attack",
+					"second": {
+						"SSubSceneInfo": {
+							"filePath": "matchSubScene/under_attack.bmp",
+							"key": "under_attack",
+							"locale": false,
+							"left": 670,
+							"top": 250,
+							"right": 790,
+							"bottom": 410
+						}
+					}
+				}, {
+					"first": "start_match",
+					"second": {
+						"SSubSceneInfo": {
+							"filePath": "matchSubScene/start_match.bmp",
+							"key": "start_match",
+							"left": 5,
+							"top": 510,
+							"right": 105,
+							"bottom": 590,
+							"degree": 0.80,
+							"offsetX": 0,
+							"offsetY": -10
+						}
+					}
+				}, {
+					"first": "start_match_stars",
+					"second": {
+						"SSubSceneInfo": {
+							"filePath": "matchSubScene/start_match_stars.bmp",
+							"key": "start_match_stars",
+							"left": 5,
+							"top": 510,
+							"right": 105,
+							"bottom": 590,
+							"degree": 0.80,
+							"offsetX": 0,
+							"offsetY": -10
+						}
+					}
+				}
 			]
 		}
 	}
