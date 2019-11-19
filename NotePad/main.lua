@@ -9,7 +9,7 @@ local robot = nil
 --local testImg = nil
 local bShowDemoWindow = false
 
-g_InputUseDriver = true
+g_InputUseDriver = false
 g_mainGameWnd = nil
 
 ---------------------------------------------------------------------
@@ -125,43 +125,43 @@ function love.load(arg)
 		ForegroundClick(robot, 50, 30)
 		
 		-- input text 'abc'
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 65, false, true)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 65, false, true)
 		Wolves.Sleep(20)
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 65, false, false)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 65, false, false)
 
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 66, false, true)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 66, false, true)
 		Wolves.Sleep(20)
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 66, false, false)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 66, false, false)
 
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 67, false, true)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 67, false, true)
 		Wolves.Sleep(20)
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 67, false, false)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 67, false, false)
 
 		-- move cursor to left 3 times
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 37, true, true)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, true)
 		Wolves.Sleep(20)
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 37, true, false)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, false)
 
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 37, true, true)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, true)
 		Wolves.Sleep(20)
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 37, true, false)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, false)
 
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 37, true, true)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, true)
 		Wolves.Sleep(20)
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 37, true, false)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, false)
 
 		-- input text '123'
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 49, false, true)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 49, false, true)
 		Wolves.Sleep(20)
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 49, false, false)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 49, false, false)
 
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 50, false, true)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 50, false, true)
 		Wolves.Sleep(20)
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 50, false, false)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 50, false, false)
 
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 51, false, true)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 51, false, true)
 		Wolves.Sleep(20)
-		robot:InputForegroundKeyEvent(g_mainGameWnd, true, 51, false, false)
+		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 51, false, false)
 
 	end
 
