@@ -203,7 +203,7 @@ function love.draw()
 	theAppLog:Draw("Log", true);
 	
 	if bShowDemoWindow then
-		imgui.ShowDemoWindow(true)
+		bShowDemoWindow = imgui.ShowDemoWindow(true)
 	end
 
     imgui.Render();
