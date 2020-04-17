@@ -5,6 +5,11 @@
 require "Hook"
 require "GameX.StateScripts"
 
+-- test love.enet
+--require "love"
+--local enet = require "enet"
+
+
 ---------------------------------------------------------------------
 -- some global configs
 
@@ -36,10 +41,22 @@ end
 
 ---------------------------------------------------------------------
 function SleepWithSnapshot(robot, msMaxTime)
-	robot:TakeSnapshot()
-	Wolves.Sleep(msMaxTime)
+	local timePassed = 0
+	if msMaxTime < 30 then
+		msMaxTime = 30
+	end
+	
+	while timePassed < msMaxTime do
+		if g_mainGameWnd ~= nil then
+			robot:TakeSnapshotWindow(g_mainGameWnd);
+		end
+		
+		Wolves.Sleep(30)
+		timePassed = timePassed + 30
+	end
 end
 
+---------------------------------------------------------------------
 function IsSubSceneMatched_InTime(robot, subScene, msMaxTime)
 	local timePassed = 0
 	if msMaxTime < 30 then
@@ -133,14 +150,18 @@ end
 ---------------------------------------------------------------------
 function RobotRun(robot, msDelta)
 
-	local gs = robot:TakeSnapshot()
+	if g_mainGameWnd ~= nil then
+		local gs = robot:TakeSnapshotWindow(g_mainGameWnd);
+
 	--if gs ~= nil then
 		--print("Save image...")
-		--gs:SaveToFile("E:/1.png")
-		
+			--gs:SaveToFile("E:/" .. iCount ..".png")
+			--iCount = iCount + 1
 		--gs:ShowDebugWindow("gs")
 		--GameScene.s_WaitKey(1000)
 	--end
+
+	end
 
 	StateManager:Update(robot, msDelta)
 	
@@ -196,6 +217,9 @@ end
 ---------------------------------------------------------------------
 function main()
 
+	-- test love.enet
+	--local host = enet.host_create("localhost:6789")
+
 	LogInfo("Enter HookLogic...")
 
 	local robot = Wolves.GetRobot()
@@ -203,9 +227,9 @@ function main()
 
 	
 	-- Ö§³ÖÍ¨Åä·û*, ?
-	local wndArray = Window.s_FindWindow("leidian*", "")
+	local wndArray = Window.s_FindWindow("0*", "")
 	local count = wndArray:Size()
-	LogInfo("Find all windows with titile is 'leidian*': " .. tostring(count))
+	LogInfo("Find all windows with titile is '0*': " .. tostring(count))
 	
 	if count ~= 0 then
 		g_mainGameWnd = wndArray:At(1)

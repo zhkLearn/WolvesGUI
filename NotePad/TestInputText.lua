@@ -27,6 +27,13 @@ function ForegroundClick(robot, x, y)
 	robot:InputForegroundMouseButtonEvent(g_mainGameWnd, g_InputUseDriver, true, false)
 end
 
+function InputText(robot, wnd, str, sleep)
+	
+	robot:InputText(wnd, str, 2) -- to UNICODE
+
+	Wolves.Sleep(sleep)
+end
+
 ---------------------------------------------------------------------
 function main()
 
@@ -47,8 +54,8 @@ function main()
 		Wolves.LogInfo("robot:Initialize() OK")
 
 		-- 支持通配符*, ?
-		--local wndArray = Window.s_FindWindow("Untitled - NotePad", "")
-		local wndArray = Window.s_FindWindow("无标题 - 记事本", "")
+		local wndArray = Window.s_FindWindow("Untitled - NotePad", "")
+		--local wndArray = Window.s_FindWindow("无标题 - 记事本", "")
 		local count = wndArray:Size()
 		Wolves.LogInfo("Find all windows with titile is 'Untitled - NotePad': " .. tostring(count))
 		
@@ -91,13 +98,15 @@ function main()
 			robot:InputKeyEvent(editWnd, 13, false)
 			Wolves.Sleep(1000)
 
+
+			InputText(robot, editWnd, "Clipboard test:\n", 1000)
 			robot:CopyTextToClipboard("Input from Clipboard")
-			local str = robot:GetTextFromClipboard()
-			print(str)
+			print(robot:GetTextFromClipboard())
 			robot:InputPaste(editWnd)
-			Wolves.Sleep(1000)
+			InputText(robot, editWnd, "\n", 100)
 			
 			-- Ctrl + V
+			InputText(robot, editWnd, "Ctrl + V:\n", 1000)
 			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 162, false, true)
 			Wolves.Sleep(2)
 			robot:InputKeyEvent(editWnd, 86, true)
@@ -105,13 +114,10 @@ function main()
 			robot:InputKeyEvent(editWnd, 86, false)
 			Wolves.Sleep(2)
 			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 162, false, false)
-
-			robot:InputKeyEvent(editWnd, 13, true)
-			Wolves.Sleep(2)
-			robot:InputKeyEvent(editWnd, 13, false)
-			Wolves.Sleep(1000)
+			InputText(robot, editWnd, "\n", 100)
 
 			-- Shift + V
+			InputText(robot, editWnd, "Shift + V:\n", 1000)
 			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 160, false, true)
 			Wolves.Sleep(2)
 			robot:InputKeyEvent(editWnd, 86, true)
@@ -119,13 +125,10 @@ function main()
 			robot:InputKeyEvent(editWnd, 86, false)
 			Wolves.Sleep(2)
 			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 160, false, false)
-			
-			robot:InputKeyEvent(editWnd, 13, true)
-			Wolves.Sleep(2)
-			robot:InputKeyEvent(editWnd, 13, false)
-			Wolves.Sleep(1000)
+			InputText(robot, editWnd, "\n", 100)
 
 			-- background input
+			InputText(robot, editWnd, "input text 'abc' 5 times\n", 1000)
 			for i = 1, 5, 1 do
 
 				-- input text 'abc'
@@ -142,6 +145,9 @@ function main()
 				robot:InputKeyEvent(editWnd, 67, false)
 			
 			end
+			
+			Wolves.Sleep(500)
+			InputText(robot, editWnd, "\n", 100)
 			
 		end
 

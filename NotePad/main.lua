@@ -8,8 +8,10 @@ local clearColor = { 0, 0, 0 }
 local robot = nil
 --local testImg = nil
 local bShowDemoWindow = false
+local toolWnd = nil
+local textValue = ""
 
-g_InputUseDriver = false
+g_InputUseDriver = true
 g_mainGameWnd = nil
 
 ---------------------------------------------------------------------
@@ -66,18 +68,20 @@ function G_CalledFromC_AppAddLog(level, content)
 end
 
 
-function ForegroundClick(robot, x, y)
+function ForegroundClick(robot, wnd, x, y)
 
-	robot:InputForegroundMouseMove(g_mainGameWnd, g_InputUseDriver, x, y)
+	robot:InputForegroundMouseMove(wnd, g_InputUseDriver, x, y)
 	Wolves.Sleep(50)
 	
 	-- left button down
-	robot:InputForegroundMouseButtonEvent(g_mainGameWnd, g_InputUseDriver, true, true)
+	robot:InputForegroundMouseButtonEvent(wnd, g_InputUseDriver, true, true, x, y)
 
 	Wolves.Sleep(20)
 
 	-- left button up
-	robot:InputForegroundMouseButtonEvent(g_mainGameWnd, g_InputUseDriver, true, false)
+	robot:InputForegroundMouseButtonEvent(wnd, g_InputUseDriver, true, false, x, y)
+	
+	Wolves.Sleep(200)
 end
 
 ---------------------------------------------------------------------
@@ -99,14 +103,20 @@ function love.load(arg)
 
 		-- Initialize() Params: enableMonitorWindow, useInputDriver
 		-- InitializeEx() Params: useInputDriver, PositionMonitor, SizeMonitor, ChildWnd
-		if not robot:InitializeEx(g_InputUseDriver, SSize(600, 30), SSize(400, 250), true) then
+		--if not robot:InitializeEx(g_InputUseDriver, SSize(600, 30), SSize(400, 250), true) then
+		if not robot:Initialize(false, g_InputUseDriver) then
 			Wolves.LogError("robot:Initialize() failed!")
 			return
 		end
 		Wolves.LogInfo("robot:Initialize() OK")
+		
+		toolWnd = robot:GetToolWindow()
+		Wolves.LogInfo("toolWnd " .. string.format("0x%08X", toolWnd:GetHandle()))
 
+--[[
 		-- 支持通配符*, ?
-		local wndArray = Window.s_FindWindow("Untitled - NotePad", "")
+		--local wndArray = Window.s_FindWindow("Untitled - NotePad", "")
+		local wndArray = Window.s_FindWindow("无标题 - 记事本", "")
 		local count = wndArray:Size()
 		Wolves.LogInfo("Find all windows with titile is 'Untitled - NotePad': " .. tostring(count))
 		
@@ -122,7 +132,7 @@ function love.load(arg)
 		end
 
 		-- active the window
-		ForegroundClick(robot, 50, 30)
+		ForegroundClick(robot, g_mainGameWnd, 50, 30)
 		
 		-- input text 'abc'
 		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 65, false, true)
@@ -162,11 +172,13 @@ function love.load(arg)
 		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 51, false, true)
 		Wolves.Sleep(20)
 		robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 51, false, false)
+--]]
 
 	end
 
 end
 
+local focusActived = 0
 function love.update(dt)
     imgui.NewFrame()
 
@@ -178,7 +190,27 @@ function love.update(dt)
 		theAppLog:AddLog("[".. st.level .. "] " .. st.data)
 	end
 	
+	
+	if robot ~= nil and toolWnd ~= nil then
+		
+		focusActived = focusActived + 1
+		
+		if focusActived >= 100 and focusActived <= 110 then
+			ForegroundClick(robot, toolWnd, 120, 120)
+			--robot:InputClick(toolWnd, 120, 120)
+		end
+
+		if focusActived <= 200 then
+			-- input text 'a'
+			robot:InputForegroundKeyEvent(toolWnd, g_InputUseDriver, 65, false, true)
+			Wolves.Sleep(20)
+			robot:InputForegroundKeyEvent(toolWnd, g_InputUseDriver, 65, false, false)
+		end
+	
+	end
+
 end
+
 
 function love.draw()
 
@@ -195,8 +227,6 @@ function love.draw()
         end
         imgui.EndMainMenuBar()
     end
-
-    love.graphics.clear(clearColor[1], clearColor[2], clearColor[3])
 	
 	--love.graphics.draw(testImg, 0, 0)
 	
@@ -206,6 +236,17 @@ function love.draw()
 		bShowDemoWindow = imgui.ShowDemoWindow(true)
 	end
 
+----[[
+	imgui.SetNextWindowPos(50, 50, "ImGuiCond_FirstUseEver")
+	local showAnotherWindow = imgui.Begin("TestInputWindow", true, { "ImGuiWindowFlags_AlwaysAutoResize" });
+	-- Input text
+	imgui.SetNextWindowFocus()
+	textValue = imgui.InputTextMultiline("InputText", textValue, 200, 300, 200);
+	imgui.End();
+
+--]]
+
+    love.graphics.clear(clearColor[1], clearColor[2], clearColor[3])
     imgui.Render();
 	
 	if bQuitApp then
@@ -238,6 +279,7 @@ function love.textinput(t)
 end
 
 function love.keypressed(key)
+	theAppLog:AddLog("keypressed: " .. key)
     imgui.KeyPressed(key)
     if not imgui.GetWantCaptureKeyboard() then
         -- Pass event to the game
@@ -259,6 +301,7 @@ function love.mousemoved(x, y)
 end
 
 function love.mousepressed(x, y, button)
+	theAppLog:AddLog("mousepressed: " .. x .. ", " .. y)
     imgui.MousePressed(button)
     if not imgui.GetWantCaptureMouse() then
         -- Pass event to the game
