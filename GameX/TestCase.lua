@@ -6,12 +6,20 @@
 --package.cpath = "W:\\Debug\\?.dll"
 require "Hook"
 
+imageDir = "./GameX/"
+
 --代码页     描述
 --65001     UTF-8代码页
 --950       繁体中文
 --936       简体中文默认的GBK
 --437       MS-DOS 美国英语
 os.execute("CHCP 65001")
+
+-- To use Log functions
+if not Wolves.Initialize("GameX") then
+	print("Wolves.Initialize() failed!")
+end
+
 
 print("\n-------------------------------------------------------------------------------")
 print("Test SSize...")
@@ -89,9 +97,10 @@ print(rgb0, rgb0.r, rgb0.g, rgb0.b)
 
 print("\n-------------------------------------------------------------------------------")
 print("Test GameScene...")
-local gs = GameScene("E:/1.png", false);
+local gs = GameScene()
+gs:LoadFromFile(imageDir .. "test.png", false);
 print("gs:SaveToFile")
-gs:SaveToFile("E:/1_bak.png")
+gs:SaveToFile(imageDir .. "test_bak.png")
 
 print("gs:IsValid: ", gs:IsValid())
 print("gs:GetSize: ", gs:GetSize())
@@ -106,7 +115,7 @@ print("gs3:GetSize: ", gs3:GetSize())
 
 print("gs4 = gs:SubChannel(0)")
 local gs4 = gs:SubChannel(0)
-gs4:SaveToFile("E:/1_sub.png")
+gs4:SaveToFile(imageDir .. "test_subChannel.png")
 
 local rgb = gs:GetPixel(SSize(350, 250))
 print("GetPixel: ", rgb, rgb.r, rgb.g, rgb.b)
@@ -161,8 +170,23 @@ gs2:ErodeDilate(1, true, 3)
 --gs2:ShowDebugWindow("gs2 Drawings")
 --GameScene.s_WaitKey(2000)
 
-gs2:SaveToFile("E:/1_draw.png")
+gs2:SaveToFile(imageDir .. "test_draw.png")
 
+local gs3 = GameScene()
+gs3:Create(800, 600, 0, 0, 0);
+gs3:Circle(SSize(400, 300), 250, 0, 255, 0, 1, 4)
+gs3:SaveToFile(imageDir .. "test_create.png")
+
+print("\n-------------------------------------------------------------------------------")
+print("\nTest snapshot desktop...")
+local robot = Wolves.GetRobot()
+local desktop = Window()
+desktop:FromHandle(0)
+print("Desktop window handle: ", desktop:GetHandle())
+local gsDesktop = robot:TakeSnapshotWindow(desktop);
+gsDesktop:SaveToFile(imageDir .. "desktop.png")
+
+Wolves.Finalize();
 
 
 

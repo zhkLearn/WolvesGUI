@@ -41,7 +41,7 @@ function StateUnknown:OnUpdate(robot, dtTime)
 		
 		local pt = rcOuts:At(1):Center();
 		--LogInfo(tostring(pt))
-		robot:InputClick(g_gameContentWnd, pt.cx, pt.cy);
+		robot:InputMouseClick(g_gameContentWnd, 0, pt.cx, pt.cy);
 		
 	else
 

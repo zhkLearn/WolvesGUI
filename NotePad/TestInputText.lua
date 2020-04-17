@@ -13,18 +13,18 @@ function G_CalledFromC_AppAddLog(level, content)
 end
 
 
-function ForegroundClick(robot, x, y)
+function ForegroundClick(robot, x, y, ensureForeground)
 
-	robot:InputForegroundMouseMove(g_mainGameWnd, g_InputUseDriver, x, y)
+	robot:InputForegroundMouseMove(g_mainGameWnd, g_InputUseDriver, x, y, ensureForeground)
 	Wolves.Sleep(50)
 	
 	-- left button down
-	robot:InputForegroundMouseButtonEvent(g_mainGameWnd, g_InputUseDriver, true, true)
+	robot:InputForegroundMouseButtonEvent(g_mainGameWnd, g_InputUseDriver, 0, true, ensureForeground)
 
 	Wolves.Sleep(20)
 
 	-- left button up
-	robot:InputForegroundMouseButtonEvent(g_mainGameWnd, g_InputUseDriver, true, false)
+	robot:InputForegroundMouseButtonEvent(g_mainGameWnd, g_InputUseDriver, 0, false, ensureForeground)
 end
 
 function InputText(robot, wnd, str, sleep)
@@ -76,15 +76,15 @@ function main()
 		if wndArray:Size() > 0 then
 
 			local editWnd = wndArray:At(1)
-			
-			robot:InputText(editWnd, "Input keep original 汉字测试 保持原始.", 0)		-- keep original
 
+			robot:InputText(editWnd, "Input keep original UTF-8 汉字测试 保持原始.", 0)		-- keep original
+			
 			robot:InputKeyEvent(editWnd, 13, true)
 			Wolves.Sleep(2)
 			robot:InputKeyEvent(editWnd, 13, false)
 			Wolves.Sleep(1000)
 
-			robot:InputText(editWnd, "Input to MBCS 汉字测试 转换为MBCS.", 1)	-- to MBCS
+			robot:InputText(editWnd, "Input to MBCS(Chinese char cannot be displayed under none Chinese locale) 汉字测试 转换为MBCS.", 1)	-- to MBCS
 
 			robot:InputKeyEvent(editWnd, 13, true)
 			Wolves.Sleep(2)
@@ -104,29 +104,29 @@ function main()
 			print(robot:GetTextFromClipboard())
 			robot:InputPaste(editWnd)
 			InputText(robot, editWnd, "\n", 100)
-			
+
 			-- Ctrl + V
 			InputText(robot, editWnd, "Ctrl + V:\n", 1000)
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 162, false, true)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 162, false, true, true)
 			Wolves.Sleep(2)
 			robot:InputKeyEvent(editWnd, 86, true)
 			Wolves.Sleep(2)
 			robot:InputKeyEvent(editWnd, 86, false)
 			Wolves.Sleep(2)
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 162, false, false)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 162, false, false, true)
 			InputText(robot, editWnd, "\n", 100)
 
 			-- Shift + V
 			InputText(robot, editWnd, "Shift + V:\n", 1000)
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 160, false, true)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 160, false, true, true)
 			Wolves.Sleep(2)
 			robot:InputKeyEvent(editWnd, 86, true)
 			Wolves.Sleep(2)
 			robot:InputKeyEvent(editWnd, 86, false)
 			Wolves.Sleep(2)
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 160, false, false)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 160, false, false, true)
 			InputText(robot, editWnd, "\n", 100)
-
+			
 			-- background input
 			InputText(robot, editWnd, "input text 'abc' 5 times\n", 1000)
 			for i = 1, 5, 1 do
@@ -153,54 +153,54 @@ function main()
 
 
 		-- active the window
-		--ForegroundClick(robot, 50, 30)
+		--ForegroundClick(robot, 50, 30, true)
 
 		for i = 1, 5, 1 do
 			
 			if g_InputUseDriver then
-				robot:InputForegroundProbeKeyBoardIndex(i)
+			robot:InputForegroundProbeKeyBoardIndex(i)
 			end
 			
 			-- input text 'abc'
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 65, false, true)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 65, false, true, true)
 			Wolves.Sleep(20)
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 65, false, false)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 65, false, false, true)
 
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 66, false, true)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 66, false, true, true)
 			Wolves.Sleep(20)
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 66, false, false)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 66, false, false, true)
 
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 67, false, true)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 67, false, true, true)
 			Wolves.Sleep(20)
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 67, false, false)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 67, false, false, true)
 
 			-- move cursor to left 3 times
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, true)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, true, true)
 			Wolves.Sleep(20)
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, false)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, false, true)
 
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, true)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, true, true)
 			Wolves.Sleep(20)
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, false)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, false, true)
 
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, true)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, true, true)
 			Wolves.Sleep(20)
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, false)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 37, true, false, true)
 			
 			Wolves.Sleep(1000)
 
 			-- input text '123'
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 49, false, true)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 49, false, true, true)
 			Wolves.Sleep(20)
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 49, false, false)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 49, false, false, true)
 
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 50, false, true)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 50, false, true, true)
 			Wolves.Sleep(20)
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 50, false, false)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 50, false, false, true)
 
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 51, false, true)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 51, false, true, true)
 			Wolves.Sleep(20)
-			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 51, false, false)
+			robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, 51, false, false, true)
 
 		end
 	

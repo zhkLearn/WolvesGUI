@@ -3,7 +3,7 @@
 
 --package.cpath = "W:\\?.dll"
 require "Hook"
-require "GameX.StateScripts"
+require "TLBB.StateScripts"
 
 -- test love.enet
 --require "love"
@@ -15,7 +15,7 @@ require "GameX.StateScripts"
 
 g_InputUseDriver = false
 g_mainGameWnd = nil
-g_gameContentWnd = nil
+g_theSharedTable = nil
 
 ---------------------------------------------------------------------
 g_UpdateTime =
@@ -133,24 +133,36 @@ function IsPixelMatched_InTime(robot, posStart, offSetX, offSetY, pixelCount, rg
 end
 
 ---------------------------------------------------------------------
-function ForegroundClick(robot, x, y, ensureForeground)
+function ForegroundClick(robot, x, y)
 
-	robot:InputForegroundMouseMove(g_mainGameWnd, g_InputUseDriver, x, y, ensureForeground)
-	Wolves.Sleep(50)
+	robot:InputForegroundMouseMove(g_mainGameWnd, g_InputUseDriver, x, y, false)
+	Wolves.Sleep(10)
 	
 	-- left button down
-	robot:InputForegroundMouseButtonEvent(g_mainGameWnd, g_InputUseDriver, 0, true, ensureForeground)
+	robot:InputForegroundMouseButtonEvent(g_mainGameWnd, g_InputUseDriver, 0, true, false)
 
-	Wolves.Sleep(20)
+	Wolves.Sleep(10)
 
 	-- left button up
-	robot:InputForegroundMouseButtonEvent(g_mainGameWnd, g_InputUseDriver, 0, false, ensureForeground)
+	robot:InputForegroundMouseButtonEvent(g_mainGameWnd, g_InputUseDriver, 0, false, false)
+end
+
+function ForegroundPressKey(robot, vk)
+	robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, vk, false, true, false)
+	Wolves.Sleep(2)
+	robot:InputForegroundKeyEvent(g_mainGameWnd, g_InputUseDriver, vk, false, false, false)
+end
+
+function BackgroundPressKey(robot, vk)
+	robot:InputKeyEvent(g_mainGameWnd, vk, true)
+	Wolves.Sleep(2)
+	robot:InputKeyEvent(g_mainGameWnd, vk, false)
 end
 
 ---------------------------------------------------------------------
 function RobotRun(robot, msDelta)
 
-	if g_mainGameWnd ~= nil then
+	if g_mainGameWnd ~= nil and g_mainGameWnd:IsValid() then
 		local gs = robot:TakeSnapshotWindow(g_mainGameWnd);
 
 		--if gs ~= nil then
@@ -173,7 +185,7 @@ end
 function LogDebug(content)
 	local t = Wolves.SharedManager.NewSharedTable()
 	t.type = "Log"
-	t.level = "Debug"
+	t.level = EnumLogLevel.eDebug
 	t.data = content
 	Wolves.SharedManager.SendMessageToMainThread(t)
 	
@@ -184,7 +196,7 @@ end
 function LogInfo(content)
 	local t = Wolves.SharedManager.NewSharedTable()
 	t.type = "Log"
-	t.level = "Info "
+	t.level = EnumLogLevel.eInfo
 	t.data = content
 	Wolves.SharedManager.SendMessageToMainThread(t)
 	
@@ -195,7 +207,7 @@ end
 function LogWarn(content)
 	local t = Wolves.SharedManager.NewSharedTable()
 	t.type = "Log"
-	t.level = "Warn "
+	t.level = EnumLogLevel.eWarn
 	t.data = content
 	Wolves.SharedManager.SendMessageToMainThread(t)
 	
@@ -206,12 +218,23 @@ end
 function LogError(content)
 	local t = Wolves.SharedManager.NewSharedTable()
 	t.type = "Log"
-	t.level = "Error"
+	t.level = EnumLogLevel.eError
 	t.data = content
 	Wolves.SharedManager.SendMessageToMainThread(t)
 
 	-- to log to file
 	Wolves.LogError(content)
+end
+
+function LogFatal(content)
+	local t = Wolves.SharedManager.NewSharedTable()
+	t.type = "Log"
+	t.level = EnumLogLevel.eFatal
+	t.data = content
+	Wolves.SharedManager.SendMessageToMainThread(t)
+
+	-- to log to file
+	Wolves.LogFatal(content)
 end
 
 ---------------------------------------------------------------------
@@ -225,36 +248,12 @@ function main()
 	local robot = Wolves.GetRobot()
 	LogInfo("Wolves.GetRobot()")
 	
-	
-	-- 支持通配符*, ?
-	local wndArray = Window.s_FindWindow("0*", "")
-	local count = wndArray:Size()
-	LogInfo("Find all windows with titile is '0*': " .. tostring(count))
-	
-	if count ~= 0 then
-		g_mainGameWnd = wndArray:At(1)
-		
-		-- Params: window, simple(false: hook 3d), flipY
-		if not robot:HookWindow(g_mainGameWnd, false, true) then
-			LogError("robot:HookWindow failed!")
-			return
-		end
-		LogInfo("robot:HookWindow() OK")
-		
-		wndArray = g_mainGameWnd:FindChildWindow("TheRender", "")
-		if wndArray:Size() > 0 then
-			g_gameContentWnd = wndArray:At(1)
-			LogInfo("subWnd found. ClientRect: " .. tostring(g_gameContentWnd:GetClientRect()))
-		else
-			LogError("subWnd NOT found!")
-		end
-	end
-	
 
+	g_mainGameWnd = Window()
+	
 	g_UpdateTime.preTime = Wolves.GetCurTime()
 	g_UpdateTime.curTime = g_UpdateTime.preTime
 	
-
 	StateManager:ChangeState(robot, StateManager.stateUnknown)
 	
 	local bRun = true
@@ -262,12 +261,20 @@ function main()
 	
 		local dtTime = UpdateTimeAdvance(robot, 50)
 
-		RobotRun(robot, dtTime)
+		g_theSharedTable = Wolves.SharedManager.AcquireSharedTable(g_theSharedTableName)
+		assert(g_theSharedTable)
 
+		RobotRun(robot, dtTime)
+		
 		local st = Wolves.SharedManager.FetchCurThreadMessage()
-		if st ~= nil and st.type == "Quit" then
-			LogInfo("Received Quit msg...")
-			bRun = false
+		if st ~= nil then
+			if st.type == "Stop" then
+				LogInfo("Received Stop msg...")
+				StateManager:ChangeState(robot, StateManager.stateUnknown)
+			elseif st.type == "Quit" then
+				LogInfo("Received Quit msg...")
+				bRun = false
+			end
 		end
 	end
 

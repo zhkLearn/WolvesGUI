@@ -1,13 +1,36 @@
-﻿Version 0.8	2019-11-9
+﻿Version 0.10.0	2020-3-17
+		按键函数修改
+		InputMouseClick(wnd, lmr, x, y)
+		InputMouseButtonDown(wnd, lmr, x, y)
+		InputMouseButtonRelease(wnd, lmr, x, y)
+		InputMouseMove(wnd, x, y)
+		InputMouseHoldMove(wnd, lmr, x, y)
+		InputForegroundMouseButtonEvent(wnd, useDriver, lmr, isDown, ensureForeground);
+		InputForegroundMouseMoveRelative(wnd, useDriver, xDelta, yDelta, ensureForeground);
+
+Version 0.9	2020-2-22
+		ImGUI增加TabBar控件，具体见TLBB例子
+		Window增加下面函数：
+			SetForegroundWindow()
+			Window s_GetForegroundWindow()		--静态函数
+		Wolves增加函数：
+			SetLogLevel(level)	-- 1 Debug; 2 Info; 3 Warning; 4 Error; 5 Fatal
+		Robot几个前台输入函数增加参数ensureForeground，如果是true会将不是前台的窗口置为前台(以前默认会这样操作)
+			InputForegroundMouseButtonEvent(wnd, useDriver, isLeft, isDown, ensureForeground)
+			InputForegroundMouseMove(wnd, useDriver, x, y, ensureForeground)
+			InputForegroundMouseScroll(wnd, useDriver, isUp, ensureForeground)
+			InputForegroundKeyEvent(wnd, useDriver, vk, isExtend, isDown, ensureForeground) 
+	
+Version 0.8	2019-11-9
 		Robot增加下面函数：
 			InputKeyEvent(wnd, vk, isDown)
 			InputText(wnd, str, mode) -- //str must in UTF-8; mode, 0: keep original; 1: to MBCS; 2: to Unicode
-            // 剪贴板相关
-            bool CopyTextToClipboard(str)
-            str = GetTextFromClipboard()
-            InputCut(wnd);
-            InputCopy(wnd);
-            InputPaste(wnd);
+	            // 剪贴板相关
+	        bool CopyTextToClipboard(str)
+        	str = GetTextFromClipboard()
+	        InputCut(wnd);
+        	InputCopy(wnd);
+	        InputPaste(wnd);
 
 Version 0.7	2019-10-30
 		增加函数Wolves.Version()，获取版本号string

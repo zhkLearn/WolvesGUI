@@ -41,7 +41,7 @@ function StateUnknown:OnUpdate(robot, dtTime)
 		
 		local pt = rcOuts:At(1):Center();
 		LogInfo(tostring(pt))
-		ForegroundClick(robot, pt.cx, pt.cy);
+		ForegroundClick(robot, pt.cx, pt.cy, true);
 		SleepWithSnapshot(robot, 1000)
 
 		--	A： 可以连续识别和进行按键，实现功能和B段一样
@@ -93,7 +93,7 @@ function StatePlay:OnUpdate(robot, dtTime)
 		LogInfo("In Play menu");
 
 		local pt = rcOuts:At(1):Center();
-		ForegroundClick(robot, pt.cx, pt.cy);
+		ForegroundClick(robot, pt.cx, pt.cy, true);
 
 	else
 

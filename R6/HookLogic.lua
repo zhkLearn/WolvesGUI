@@ -132,18 +132,18 @@ function IsPixelMatched_InTime(robot, posStart, offSetX, offSetY, pixelCount, rg
 end
 
 ---------------------------------------------------------------------
-function ForegroundClick(robot, x, y)
+function ForegroundClick(robot, x, y, ensureForeground)
 
-	robot:InputForegroundMouseMove(g_mainGameWnd, g_InputUseDriver, x, y)
+	robot:InputForegroundMouseMove(g_mainGameWnd, g_InputUseDriver, x, y, ensureForeground)
 	Wolves.Sleep(50)
 	
 	-- left button down
-	robot:InputForegroundMouseButtonEvent(g_mainGameWnd, g_InputUseDriver, true, true)
+	robot:InputForegroundMouseButtonEvent(g_mainGameWnd, g_InputUseDriver, 0, true, ensureForeground)
 
 	Wolves.Sleep(20)
 
 	-- left button up
-	robot:InputForegroundMouseButtonEvent(g_mainGameWnd, g_InputUseDriver, true, false)
+	robot:InputForegroundMouseButtonEvent(g_mainGameWnd, g_InputUseDriver, 0, false, ensureForeground)
 end
 
 ---------------------------------------------------------------------
