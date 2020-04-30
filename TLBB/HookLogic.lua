@@ -1,4 +1,4 @@
-﻿--io.write("Waiting for debug hook...")
+--io.write("Waiting for debug hook...")
 --local str = io.read()
 
 --package.cpath = "W:\\?.dll"
@@ -165,13 +165,16 @@ function RobotRun(robot, msDelta)
 	if g_mainGameWnd ~= nil and g_mainGameWnd:IsValid() then
 		local gs = robot:TakeSnapshotWindow(g_mainGameWnd);
 
-		--if gs ~= nil then
+--[[
+		local iCount = 0
+		if gs ~= nil then
 			--print("Save image...")
-			--gs:SaveToFile("E:/" .. iCount ..".png")
-			--iCount = iCount + 1
+			gs:SaveToFile("E:/" .. iCount ..".png")
+			iCount = iCount + 1
 			--gs:ShowDebugWindow("gs")
 			--GameScene.s_WaitKey(1000)
-		--end
+		end
+--]]
 
 	end
 

@@ -2,6 +2,9 @@
 
 require "Hook"
 
+--io.write("Waiting for debug hook...")
+--local str = io.read()
+
 local robot = nil
 g_InputUseDriver = false
 g_mainGameWnd = nil

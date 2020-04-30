@@ -147,8 +147,10 @@ end
 
 function FindAllGameWnds()
 
-	gameWndArray = Window.s_FindWindow("", "TianLongBaBu WndClass")
+	--gameWndArray = Window.s_FindWindow("", "TianLongBaBu WndClass")
 	--gameWndArray = Window.s_FindWindow("", "Notepad")
+	gameWndArray = Window.s_FindWindow("example-00-helloworldRelease", "")
+
 	local count = gameWndArray:Size()
 	if count ~= 0 then
 		Wolves.LogInfo("Find all TLBB windows: " .. tostring(count))

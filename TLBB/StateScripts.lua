@@ -1,4 +1,4 @@
-
+﻿
 -- StateScripts
 require "TLBB.TypeDefine"
 
@@ -29,10 +29,13 @@ State =
 stateUnknown = State:new{name = "stateUnknown"}
 function stateUnknown:OnEnter(robot)
 	LogInfo("OnEnter: " .. self.name)
-	--local gs = robot:GetCurGameScene()
-	--if gs ~= nil then
-		--gs:SaveToFile("E:/enter_unknown.png")
-	--end
+	
+	--[[
+	local gs = robot:GetCurGameScene()
+	if gs ~= nil then
+		gs:SaveToFile("E:/enter_unknown.png")
+	end
+	--]]
 end
 
 function stateUnknown:OnUpdate(robot, dtTime)
@@ -120,10 +123,13 @@ end
 stateCombat = State:new{name = "stateCombat"}
 function stateCombat:OnEnter(robot)
 	LogInfo("OnEnter: " .. self.name)
+	
+	----[[
 	local gs = robot:GetCurGameScene()
 	if gs ~= nil then
 		gs:SaveToFile("E:/enter_combat1.png")
 	end
+	--]]
 	
 	self.timerForegroundWindowCheck = SimpleTimer:new()
 	self.timerForegroundWindowCheck:SetTimer(30000, true, true)
@@ -137,6 +143,8 @@ function stateCombat:OnEnter(robot)
 	self.reTargetCur = 0
 	self.monsterBloodRatioOld = -1
 	self.monsterBloodSameTimes = 0
+	
+	self.iCount = 0
 end
 
 function stateCombat:OnUpdate(robot, dtTime)
@@ -178,7 +186,13 @@ function stateCombat:OnUpdate(robot, dtTime)
 	if gs == nil then
 		LogError("gs == nil")
 		return
+--[[
+	else
+		gs:SaveToFile("E:/Combat_" .. self.iCount ..".png")
+		self.iCount = self.iCount + 1
+--]]
 	end
+	
 	
 	-- TLBB窗口要在前台才能工作
 	if self.timerForegroundWindowCheck:OnTimer(dtTime) then
