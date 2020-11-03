@@ -1,4 +1,7 @@
-﻿Version 0.10.0	2020-3-17
+﻿Version 0.11.0	2020-11-3
+		移除函数InputForegroundProbeKeyBoardIndex(int)
+
+Version 0.10.0	2020-3-17
 		按键函数修改
 		InputMouseClick(wnd, lmr, x, y)
 		InputMouseButtonDown(wnd, lmr, x, y)
